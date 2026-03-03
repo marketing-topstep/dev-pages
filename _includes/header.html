@@ -23,7 +23,8 @@
         class="inline-flex items-center rounded-md border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-800"
         aria-label="Toggle theme"
       >
-        Theme
+        <span class="hidden dark:block">{% include icon.html name="brightness-high" %}</span>
+        <span class="block dark:hidden">{% include icon.html name="moon" %}</span>
       </button>
     </div>
 
