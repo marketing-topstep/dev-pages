@@ -109,9 +109,22 @@ To publish to staging, the new branch must be pushed to the remote origin and ha
 Switch to the new branch or confirm that your are currently on it:
 
 ```bash
-git swithch new-branch-name
+git switch new-branch-name
 git status
 git push origin new-branch-name
 ```
 
 Once the branch has been uploaded to the remote repository, navigate to Github and follow the steps to create and merge a pull request...
+
+---
+
+## Publishing to prod
+
+Use the Marketing CI workflow to publish main branch to prod:
+
+Branch: main
+Deployment environment: prod
+
+Run Workflow
+
+* workflows can be cancelled in process once they begin running
