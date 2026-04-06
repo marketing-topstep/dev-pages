@@ -15,7 +15,7 @@ Add redirect in Studio > Redirects and Publish:
 
 ---
 
-## Use update-redirect branch to create PR
+## Use update-redirects branch to create PR
 
 In GIT, switch to main branch and pull the most recent code from the remote origin
 
@@ -24,13 +24,18 @@ git checkout main
 git pull origin main
 ```
 
+Open the next.config file and copy all.
+
 Then checkout the update-redirects branch
 
 ```bash
 git checkout update-redirects
 ```
+Paste the contents of next.config into the same file in the update-redirects branch to make sure they match.
 
 Add a comment to the bottom of the next.config file to note the redirect added and have an edit to commit to the branch.
+
+Save and commit:
 
 ```bash
 git add .
