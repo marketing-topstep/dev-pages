@@ -5,6 +5,8 @@ title: "Sanity to Webflow - blog"
 
 Node conversion script for converting Sanity JSON data to CSV for import to Webflow Collection
 
+---
+
 # Sanity → Webflow Blog Migration Script
 
 This project provides a Node.js script to migrate blog content from **Sanity** to **Webflow CMS**.
