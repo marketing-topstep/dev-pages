@@ -1,7 +1,9 @@
 ---
 layout: post
-title: "Sanity to Webflow--blog data conversion"
+title: "Sanity to Webflow - blog"
 ---
+
+Node conversion script for converting Sanity JSON data to CSV for import to Webflow Collection
 
 # Sanity → Webflow Blog Migration Script
 
