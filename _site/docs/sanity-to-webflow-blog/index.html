@@ -22,7 +22,7 @@
   <!-- Title -->
   <title>
     
-      Publishing Processes | Dev-pages
+      Sanity to Webflow - blog | Dev-pages
     
   </title>
 
@@ -111,7 +111,7 @@
         <a 
           href="/dev-pages/docs/sanity-to-webflow-blog/"
           class="block text-slate-600 hover:text-slate-900 transition dark:text-neutral-400 dark:hover:text-neutral-100
-          ">
+          underline text-slate-900 dark:text-neutral-100">
           Sanity to Webflow - blog
         </a>
       </li>
@@ -129,7 +129,7 @@
         <a 
           href="/dev-pages/docs/publishing/"
           class="block text-slate-600 hover:text-slate-900 transition dark:text-neutral-400 dark:hover:text-neutral-100
-          underline text-slate-900 dark:text-neutral-100">
+          ">
           Publishing Processes
         </a>
       </li>
@@ -218,159 +218,401 @@
         <!-- Main Content -->
         <main class="md:col-span-3 h-full article">
           <article class="prose prose-lg max-w-none prose-slate dark:prose-invert dark:prose-headings:text-neutral-100 dark:prose-p:text-neutral-200 dark:prose-strong:text-neutral-100 dark:prose-a:text-sky-400 dark:hover:prose-a:text-sky-300 dark:prose-code:text-neutral-100 dark:prose-pre:bg-neutral-900 dark:prose-pre:text-neutral-100">
-  <h1>Publishing Processes</h1>
+  <h1>Sanity to Webflow - blog</h1>
   <p class="text-slate-500 text-sm dark:text-neutral-400 mb-8">
-    March 19, 2026
+    April 09, 2026
   </p>
 
-  <h1 id="git-command-line-instructions-for-publishing-a-branch-to-dev-staging-and-prod-environments">GIT command-line instructions for publishing a branch to dev, staging, and prod environments</h1>
+  <p>Node conversion script for converting Sanity JSON data to CSV for import to Webflow Collection</p>
 
 <hr />
 
-<p>After setting up GIT locally and adding remote origin, use these steps for creating a branch and publishing edits to the various environments.</p>
+<h1 id="sanity--webflow-blog-migration-script">Sanity → Webflow Blog Migration Script</h1>
 
-<h2 id="create-new-branch-from-main">Create new branch from ‘main’</h2>
+<p>This script migrates blog content from a <strong>Sanity dataset (API or local export)</strong> into a format compatible with <strong>Webflow CMS import (CSV/JSON)</strong>.</p>
 
-<p>Pull updates from repository:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
-git pull origin main
-</code></pre></div></div>
-
-<p>These commands:</p>
-<ul>
-  <li>Switch to the main branch</li>
-  <li>Pull branch from origin to update</li>
-</ul>
-
-<hr />
-
-<h2 id="create-new-branch-and-make-new-edits-locally">Create new branch and make new edits locally</h2>
-
-<p>Create a branch and run dev locally. Make any edits on this branch and commit changes when finished.</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout <span class="nt">-b</span> new-branch-name
-</code></pre></div></div>
-
-<p>This command:</p>
-<ul>
-  <li>Creates a new branch named “new-branch-name”</li>
-</ul>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm run storybook
-npm run dev
-</code></pre></div></div>
-
-<p>These commands:</p>
-<ul>
-  <li>Runs Storybook locally for component previewing and development</li>
-  <li>Runs the site locally for development</li>
-</ul>
-
-<p>After edits are completed, add files to GIT and commit the changes to the branch.</p>
-
-<p>First, double check to make sure you are on the correct branch:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
-</code></pre></div></div>
-
-<p>Then:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
-git add <span class="nb">.</span>
-git commit <span class="nt">-m</span> <span class="s2">"Message for commit"</span>
-</code></pre></div></div>
-
-<p>These commands:</p>
-<ul>
-  <li>Adds all edited files to the commit log</li>
-  <li>Commits the edits to the current branch</li>
-</ul>
-
-<p>Now the branch is ready to push or merge.</p>
-
-<hr />
-
-<h2 id="publishing-to-dev-merge">Publishing to dev (merge)</h2>
-
-<p>To publish to dev, the branch just needs to be merged with the “dev” branch. The dev project workflow is set up to publish any time edits are pushed to the dev branch (GitHub Actions). The process usually takes 5-10 minutes to complete once merged.</p>
-
-<p>First, once again, switch to the main branch and pull any updates from the remote origin:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch main
-git pull origin main
-</code></pre></div></div>
-
-<p>Then switch to the dev branch and merge the new branch into it. Then push dev to the remote origin to run the workflow:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch dev
-git merge <span class="nt">--no-ff</span> new-branch-name <span class="nt">-m</span> <span class="s2">"Merge branch-name into dev"</span>
-git push origin dev
-</code></pre></div></div>
-
-<p>These commands:</p>
-<ul>
-  <li>Switch to the dev branch</li>
-  <li>Merges edits from new-branch-name</li>
-  <li>pushes the updated dev branch to the remote origin</li>
-</ul>
-
-<h3 id="why-use---no-ff">Why use <code class="language-plaintext highlighter-rouge">--no-ff</code>?</h3>
+<p>It supports:</p>
 
 <ul>
-  <li>Preserves branch history</li>
-  <li>Makes feature merges clearly visible in the commit log</li>
-  <li>Cleaner for release tracking</li>
-  <li>Common in team workflows</li>
+  <li>Full blog content (title, slug, summary, etc.)</li>
+  <li>Rich <code class="language-plaintext highlighter-rouge">pageBuilder</code> → HTML conversion</li>
+  <li>Image handling (including local assets + filenames)</li>
+  <li>SEO field extraction and flattening</li>
+  <li>Preview mode for safe testing</li>
+  <li>Optional asset URL transformation</li>
 </ul>
 
 <hr />
 
-<h2 id="publishing-to-staging">Publishing to staging</h2>
+<h1 id="features">Features</h1>
 
-<p>To publish to staging, the new branch must be pushed to the remote origin and have a Pull Request added. Once the Pull Request is merged with the main branch, the staging publish workflow will be triggered.</p>
+<h2 id="content-migration">Content Migration</h2>
 
-<p>Switch to the new branch or confirm that your are currently on it:</p>
+<ul>
+  <li>Converts Sanity <code class="language-plaintext highlighter-rouge">blog</code> documents into Webflow-ready fields</li>
+  <li>
+    <p>Preserves:</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git switch new-branch-name
-git status
-git push origin new-branch-name
+    <ul>
+      <li>Title, slug, summary</li>
+      <li>Author + topics</li>
+      <li>Publish date</li>
+      <li>Featured image</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="page-builder--html">Page Builder → HTML</h2>
+
+<p>Supports:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">row</code> → rich text</li>
+  <li><code class="language-plaintext highlighter-rouge">fullWidthImage</code></li>
+  <li><code class="language-plaintext highlighter-rouge">table</code></li>
+  <li><code class="language-plaintext highlighter-rouge">section-heading</code></li>
+  <li><code class="language-plaintext highlighter-rouge">embedCode</code></li>
+  <li>graceful fallback for unsupported blocks</li>
+</ul>
+
+<h2 id="image-handling">Image Handling</h2>
+
+<ul>
+  <li>
+    <p>Resolves images from:</p>
+
+    <ul>
+      <li>API (<code class="language-plaintext highlighter-rouge">asset-&gt;url</code>)</li>
+      <li>local dataset (<code class="language-plaintext highlighter-rouge">_sanityAsset</code>)</li>
+    </ul>
+  </li>
+  <li>Maps images using <code class="language-plaintext highlighter-rouge">assets.json</code></li>
+  <li>Injects:</li>
+</ul>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"..."</span> <span class="na">data-file-name=</span><span class="s">"image.png"</span> <span class="nt">/&gt;</span>
 </code></pre></div></div>
 
-<p>Once the branch has been uploaded to the remote repository, navigate to Github and follow the steps to create and merge a pull request…</p>
+<h2 id="seo-support">SEO Support</h2>
+
+<p>Flattens nested Sanity <code class="language-plaintext highlighter-rouge">seo</code> object into Webflow fields:</p>
+
+<ul>
+  <li>Meta title / description</li>
+  <li>Keywords</li>
+  <li>No-follow flag</li>
+  <li>Open Graph (title, description, image, etc.)</li>
+  <li>Twitter fields</li>
+  <li>Additional meta tags (JSON)</li>
+</ul>
+
+<h2 id="preview-mode">Preview Mode</h2>
+
+<p>Inspect output without writing files:</p>
+
+<ul>
+  <li>HTML preview</li>
+  <li>SEO fields</li>
+  <li>CSV structure</li>
+</ul>
 
 <hr />
 
-<h2 id="publishing-to-prod">Publishing to prod</h2>
+<h1 id="installation">Installation</h1>
 
-<p>Use the Marketing CI workflow to publish main branch to prod:</p>
-
-<p>Branch: main
-Deployment environment: prod</p>
-
-<p>Run Workflow</p>
-
-<ul>
-  <li>workflows can be cancelled in process once they begin running</li>
-</ul>
-
-<h2 id="rolling-back-changes">Rolling back changes</h2>
-
-<p>To roll back to a previous commit:</p>
-
-<ul>
-  <li>Find the commit hash using</li>
-</ul>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--oneline</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install</span>
 </code></pre></div></div>
 
+<p>Required dependencies:</p>
+
 <ul>
-  <li>THen reset the main brnach using:</li>
+  <li><code class="language-plaintext highlighter-rouge">@sanity/client</code></li>
+  <li><code class="language-plaintext highlighter-rouge">@portabletext/to-html</code></li>
+  <li><code class="language-plaintext highlighter-rouge">json2csv</code></li>
+  <li><code class="language-plaintext highlighter-rouge">dotenv</code></li>
 </ul>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git reset <span class="nt">--hard</span> &lt;commit-hash&gt;
+<hr />
+
+<h1 id="️-environment-variables">⚙️ Environment Variables</h1>
+
+<p>Create a <code class="language-plaintext highlighter-rouge">.env.local</code> file (only required for API mode):</p>
+
+<pre><code class="language-env">SANITY_PROJECT_ID=your_project_id
+SANITY_DATASET=production
+SANITY_API_VERSION=2025-01-01
+SANITY_TOKEN=your_token_if_needed
+</code></pre>
+
+<hr />
+
+<h1 id="local-dataset-structure">Local Dataset Structure</h1>
+
+<p>When using a local export:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/export/
+  data.ndjson
+  assets.json
+  /images/
+    &lt;asset-files&gt;
 </code></pre></div></div>
+
+<h3 id="required-files">Required files:</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">data.ndjson</code> → Sanity export</li>
+  <li><code class="language-plaintext highlighter-rouge">assets.json</code> → asset metadata (IMPORTANT)</li>
+  <li><code class="language-plaintext highlighter-rouge">/images/</code> → downloaded image files</li>
+</ul>
+
+<hr />
+
+<h1 id="️-usage">▶️ Usage</h1>
+
+<h2 id="1-preview-a-single-post-recommended-first-step">1. Preview a Single Post (Recommended First Step)</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node migrate-sanity-blog-to-webflow.mjs <span class="se">\</span>
+  <span class="nt">--local-file</span><span class="o">=</span>./export/data.ndjson <span class="se">\</span>
+  <span class="nt">--assets-file</span><span class="o">=</span>./export/assets.json <span class="se">\</span>
+  <span class="nt">--images-dir</span><span class="o">=</span>./export/images <span class="se">\</span>
+  <span class="nt">--slug</span><span class="o">=</span>your-post-slug <span class="se">\</span>
+  <span class="nt">--preview</span> <span class="se">\</span>
+  <span class="nt">--no-write</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="2-export-a-single-post">2. Export a Single Post</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node migrate-sanity-blog-to-webflow.mjs <span class="se">\</span>
+  <span class="nt">--local-file</span><span class="o">=</span>./export/data.ndjson <span class="se">\</span>
+  <span class="nt">--assets-file</span><span class="o">=</span>./export/assets.json <span class="se">\</span>
+  <span class="nt">--images-dir</span><span class="o">=</span>./export/images <span class="se">\</span>
+  <span class="nt">--slug</span><span class="o">=</span>your-post-slug
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="3-export-all-posts">3. Export All Posts</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node migrate-sanity-blog-to-webflow.mjs <span class="se">\</span>
+  <span class="nt">--local-file</span><span class="o">=</span>./export/data.ndjson <span class="se">\</span>
+  <span class="nt">--assets-file</span><span class="o">=</span>./export/assets.json <span class="se">\</span>
+  <span class="nt">--images-dir</span><span class="o">=</span>./export/images
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="4-use-sanity-api-instead-of-local-data">4. Use Sanity API Instead of Local Data</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node migrate-sanity-blog-to-webflow.mjs <span class="se">\</span>
+  <span class="nt">--slug</span><span class="o">=</span>your-post-slug <span class="se">\</span>
+  <span class="nt">--preview</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="-cli-flags">🧪 CLI Flags</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Flag</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--local-file</code></td>
+      <td>Path to <code class="language-plaintext highlighter-rouge">data.ndjson</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--assets-file</code></td>
+      <td>Path to <code class="language-plaintext highlighter-rouge">assets.json</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--images-dir</code></td>
+      <td>Path to images folder</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--slug</code></td>
+      <td>Filter by slug</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--id</code></td>
+      <td>Filter by Sanity <code class="language-plaintext highlighter-rouge">_id</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--title</code></td>
+      <td>Filter by title</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--preview</code></td>
+      <td>Print preview instead of exporting</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--no-write</code></td>
+      <td>Prevent file output</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--asset-base-url</code></td>
+      <td>Replace Sanity CDN URL</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h1 id="asset-url-transformation">Asset URL Transformation</h1>
+
+<p>Optional: replace Sanity CDN URLs</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">--asset-base-url</span><span class="o">=</span>https://assets.example.com/images
+</code></pre></div></div>
+
+<p>Transforms:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://cdn.sanity.io/images/project/dataset/file.png
+↓
+https://assets.example.com/images/file.png
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="output">Output</h1>
+
+<p>Files are written to:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/output/
+  webflow-blog-import-&lt;slug&gt;.json
+  webflow-blog-import-&lt;slug&gt;.csv
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="webflow-fields-included">Webflow Fields Included</h1>
+
+<h2 id="core-fields">Core Fields</h2>
+
+<ul>
+  <li>Name</li>
+  <li>Slug</li>
+  <li>Summary</li>
+  <li>Body (HTML)</li>
+  <li>Author</li>
+  <li>Topics</li>
+  <li>Published Date</li>
+</ul>
+
+<h2 id="images">Images</h2>
+
+<ul>
+  <li>Featured Image</li>
+  <li>Featured Image Alt</li>
+  <li>Featured Image File Name</li>
+</ul>
+
+<h2 id="seo-fields">SEO Fields</h2>
+
+<ul>
+  <li>SEO Meta Title</li>
+  <li>SEO Meta Description</li>
+  <li>SEO Keywords</li>
+  <li>SEO No Follow</li>
+  <li>SEO Open Graph Title</li>
+  <li>SEO Open Graph Description</li>
+  <li>SEO Open Graph URL</li>
+  <li>SEO Open Graph Site Name</li>
+  <li>SEO Open Graph Image</li>
+  <li>SEO Open Graph Image File Name</li>
+  <li>SEO Twitter Handle</li>
+  <li>SEO Twitter Creator</li>
+  <li>SEO Twitter Site</li>
+  <li>SEO Twitter Card Type</li>
+  <li>SEO Additional Meta Tags JSON</li>
+</ul>
+
+<hr />
+
+<h1 id="️-important-notes">⚠️ Important Notes</h1>
+
+<h2 id="1-assetsjson-is-required-for-filenames">1. assets.json is Required for Filenames</h2>
+
+<p>Without it:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">data-file-name</code> will be empty</li>
+  <li>image mapping may break</li>
+</ul>
+
+<hr />
+
+<h2 id="2-relative-vs-absolute-image-urls">2. Relative vs Absolute Image URLs</h2>
+
+<p>If using:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>--asset-base-url=/relative-path
+</code></pre></div></div>
+
+<p>Make sure your final site serves images from that path.</p>
+
+<hr />
+
+<h2 id="3-webflow-rich-text-limits">3. Webflow Rich Text Limits</h2>
+
+<p>Very large blog posts may exceed Webflow limits.</p>
+
+<hr />
+
+<h2 id="4-unsupported-blocks">4. Unsupported Blocks</h2>
+
+<p>Some blocks (e.g. <code class="language-plaintext highlighter-rouge">button-insert</code>) are exported as placeholders:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Button Insert module requires manual mapping]
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="recommended-workflow">Recommended Workflow</h1>
+
+<ol>
+  <li>Run preview on 1 post</li>
+  <li>
+    <p>Verify:</p>
+
+    <ul>
+      <li>HTML structure</li>
+      <li>images</li>
+      <li>SEO fields</li>
+    </ul>
+  </li>
+  <li>Import into Webflow</li>
+  <li>Validate rendering</li>
+  <li>Batch migrate remaining posts</li>
+</ol>
+
+<hr />
+
+<h1 id="-summary">🏁 Summary</h1>
+
+<p>This script provides a complete pipeline for:</p>
+
+<ul>
+  <li>Sanity → structured HTML</li>
+  <li>Asset resolution (API + local)</li>
+  <li>SEO flattening</li>
+  <li>Webflow-ready export</li>
+</ul>
+
+<p>It is designed to be:</p>
+
+<ul>
+  <li>safe (preview mode)</li>
+  <li>flexible (API or local)</li>
+  <li>extensible (custom mappings)</li>
+</ul>
+
+<hr />
 
 </article>
 
